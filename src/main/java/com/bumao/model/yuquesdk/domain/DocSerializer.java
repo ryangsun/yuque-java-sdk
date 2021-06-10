@@ -1,14 +1,12 @@
 package com.bumao.model.yuquesdk.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 /**
- * @program: yuque
- * @description: 文档列表
- * @author: zhangchaozhen
- * @create: 2021-01-07 19:25
+ *  https://www.yuque.com/yuque/developer/docdetailserializer
  **/
 @Data
 public class DocSerializer {
@@ -25,89 +23,76 @@ public class DocSerializer {
      */
     private String title;
     /**
-     * 文档创建人 user_id
+     * book_id - 仓库编号，就是 repo_id
      */
-//    @JsonProperty("user_id")
-    private String userId;
+    private String book_id;
+    /**
+     *  仓库信息 <BookSerializer>，就是 repo 信息
+     */
+    private BookSerializer book;
+    /**
+     * 用户/团队编号
+     */
+    private String user_id;
+    /**
+     * 用户/团队信息 <UserSerializer>
+     */
+    private UserSerializer user;
     /**
      * 描述了正文的格式 [asl, markdown]
      */
     private String format;
     /**
-     * 是否公开 [1 - 公开, 0 - 私密]
+     *  - 正文 Markdown 源代码
      */
-//    @JsonProperty("public")
-    private Integer publicI;
+    private String body;
+    /**
+     *  - 草稿 Markdown 源代码
+     */
+    private String body_draft;
+    /**
+     *  - 转换过后的正文 HTML
+     */
+    private String body_html;
+    /**
+     *  - 语雀 lake 格式的文档内容
+     */
+    private String body_lake;
+    /**
+     *  - 文档创建人 User Id
+     */
+    private String creator_id;
+    /**
+     *  - 公开级别 [0 - 私密, 1 - 公开]
+     */
+    @JSONField(name="public")
+    private Integer public_id;
     /**
      * 状态 [1 - 正常, 0 - 草稿]
      */
     private Integer status;
     /**
-     * 喜欢数量
+     * 赞数量
      */
-//    @JsonProperty("likes_count")
-    private Integer likesCount;
+    private Integer likes_count;
     /**
      * 评论数量
      */
-//    @JsonProperty("comments_count")
-    private Integer commentsCount;
+    private Integer comments_count ;
     /**
      * 文档内容更新时间
      */
-//    @JsonProperty("content_updated_at")
-    private LocalDateTime contentUpdatedAt;
+    private LocalDateTime content_updated_at;
     /**
-     * 仓库编号，就是 repo_id
+     * 删除时间，未删除为 null
      */
-//    @JsonProperty("book_id")
-    private String bookId;
-    /**
-     * 所属知识库
-     */
-    private BookDetailSerializer book;
-    /**
-     * 所属团队（个人）
-     */
-    private UserSerializer user;
-    /**
-     * 最后修改人
-     */
-//    @JsonProperty("last_editor")
-    private UserSerializer lastEditor;
+    private LocalDateTime deleted_at;
     /**
      * 创建时间
      */
-//    @JsonProperty("created_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime created_at;
     /**
      * 更新时间
      */
-//    @JsonProperty("updated_at")
-    private LocalDateTime updatedAt;
-    /**
-     *删除时间，未删除为 null
-     */
-//    @JsonProperty("deleted_at")
-    private LocalDateTime deletedAt;
-
-    /**
-     * 正文 Markdown 源代码
-     */
-    private String body;
-    /**
-     * 草稿 Markdown 源代码
-     */
-//    @JsonProperty("body_draft")
-    private String bodyDraft;
-    /**
-     * 转换过后的正文 HTML
-     */
-//    @JsonProperty("body_html")
-    private String bodyHtml;
-    /**
-     * 语雀 lake 格式的文档内容
-     */
-//    @JsonProperty("body_lake")
-    private String bodyLake;
+    private LocalDateTime updated_at;
 }

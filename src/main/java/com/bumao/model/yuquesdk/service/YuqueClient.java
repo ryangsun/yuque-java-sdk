@@ -108,7 +108,7 @@ public class YuqueClient extends HttpClientHolder{
     public List<GroupSerializer> getPublicGroup(Integer offset) throws YuqueException {
         Map<String,String> para = new HashMap<String, String>();
         if(offset==null||offset<1){
-            offset = 1;
+            offset = 0;
         }
         para.put("offset",offset.toString());
 
@@ -263,7 +263,7 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public GroupUserSerializer updateGroupUserbyId(String groupId,String userLogin,Integer roleId) throws YuqueException {
+    public GroupUserSerializer updateGroupUserById(String groupId,String userLogin,Integer roleId) throws YuqueException {
         Map<String, String> map = new HashMap<>();
         map.put("role",roleId.toString());
 
@@ -284,8 +284,8 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public GroupUserSerializer updateGroupUserbyLogin(String groupLogin,String userLogin,Integer roleId) throws YuqueException {
-        return this.updateGroupUserbyId(groupLogin,userLogin,roleId);
+    public GroupUserSerializer updateGroupUserByLogin(String groupLogin,String userLogin,Integer roleId) throws YuqueException {
+        return this.updateGroupUserById(groupLogin,userLogin,roleId);
     }
 
     /**
@@ -313,7 +313,407 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public GroupUserSerializer deleteGroupUserbyLogin(String groupLogin,String userLogin) throws YuqueException {
+    public GroupUserSerializer deleteGroupUserByLogin(String groupLogin,String userLogin) throws YuqueException {
         return this.deleteGroupUserbyId(groupLogin,userLogin);
+    }
+
+    /**
+     * 获取某个用户的知识库列表 by Id
+     * @param userId
+     * @param type
+     * @param offset
+     * @return
+     * @throws YuqueException
+     */
+    public List<BookSerializer> listUserReposById(String userId,String type,Integer offset) throws YuqueException {
+        Map<String,String> para = new HashMap<String, String>();
+        if(offset==null||offset<1){
+            offset = 0;
+        }
+        para.put("offset",offset.toString());
+        if(type==null){
+            type = "all";
+        }
+        para.put("type",type);
+
+        HttpGet httpGet = buildHttpGet(yuqueApiBase+"/users/"+userId+"/repos",para);
+        //发送请求
+        HttpRespVo vo = doRequest(httpGet);
+        //转jsonArr
+        JSONArray jsonArray = JSONObject.parseObject(vo.getHttpContent()).getJSONArray("data");
+        //转实体
+        List<BookSerializer> bookSerializerList = JSONObject.parseArray(jsonArray.toJSONString(), BookSerializer.class);
+        return bookSerializerList;
+    }
+
+    /**
+     * 获取某个用户的知识库列表 by Login
+     * @param Login
+     * @param type
+     * @param offset
+     * @return
+     * @throws YuqueException
+     */
+    public List<BookSerializer> listUserReposByLogin(String Login,String type,Integer offset) throws YuqueException{
+        return this.listUserReposById(Login,type,offset);
+    }
+
+    /**
+     * 获取某个团队的知识库列表 by Id
+     * @param groupId
+     * @param type
+     * @param offset
+     * @return
+     * @throws YuqueException
+     */
+    public List<BookSerializer> listGroupReposById(String groupId,String type,Integer offset) throws YuqueException {
+        Map<String,String> para = new HashMap<>();
+        if(offset==null||offset<1){
+            offset = 0;
+        }
+        para.put("offset",offset.toString());
+        if(type==null){
+            type = "all";
+        }
+        para.put("type",type);
+
+        HttpGet httpGet = buildHttpGet(yuqueApiBase+"/groups/"+groupId+"/repos",para);
+        //发送请求
+        HttpRespVo vo = doRequest(httpGet);
+        //转jsonArr
+        JSONArray jsonArray = JSONObject.parseObject(vo.getHttpContent()).getJSONArray("data");
+        //转实体
+        List<BookSerializer> bookSerializerList = JSONObject.parseArray(jsonArray.toJSONString(), BookSerializer.class);
+        return bookSerializerList;
+    }
+
+    /**
+     * 获取某个团队的知识库列表 by Login
+     * @param groupLogin
+     * @param type
+     * @param offset
+     * @return
+     * @throws YuqueException
+     */
+    public List<BookSerializer> listGroupReposByLogin(String groupLogin,String type,Integer offset) throws YuqueException {
+        return this.listGroupReposById(groupLogin,type,offset);
+    }
+
+    /**
+     * 往团队创建知识库 by Id
+     * @param groupId
+     * @param createPo
+     * @return
+     * @throws YuqueException
+     */
+    public BookSerializer createGroupRepoById(String groupId,RepoCreatePo createPo) throws YuqueException {
+        Map<String, String> map = null;
+        try {
+            map = BeanUtils.describe(createPo);
+            map.put("public",createPo.getPublic_id().toString());
+            map.remove("public_id");
+
+        }catch (Exception e){
+            throw new YuqueException(e.getMessage(),e);
+        }
+        HttpPost httpPost = buildHttpPost(yuqueApiBase+"/groups/"+groupId+"/repos",map);
+        HttpRespVo vo = doRequest(httpPost);
+        //转json
+        JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
+        //转user
+        BookSerializer bookSerializer = JSONObject.toJavaObject(json,BookSerializer.class);
+        return bookSerializer;
+    }
+
+    /**
+     * 往团队创建知识库 by Login
+     * @param groupLogin
+     * @param createPo
+     * @return
+     * @throws YuqueException
+     */
+    public BookSerializer createGroupRepoByLogin(String groupLogin,RepoCreatePo createPo) throws YuqueException {
+        return this.createGroupRepoById(groupLogin,createPo);
+    }
+
+    /**
+     * 往自己下面创建知识库 by Id
+     * @param userId
+     * @param createPo
+     * @return
+     * @throws YuqueException
+     */
+    public BookSerializer createUserRepoById(String userId,RepoCreatePo createPo) throws YuqueException {
+        Map<String, String> map = null;
+        try {
+            map = BeanUtils.describe(createPo);
+            map.put("public",createPo.getPublic_id().toString());
+            map.remove("public_id");
+
+        }catch (Exception e){
+            throw new YuqueException(e.getMessage(),e);
+        }
+        HttpPost httpPost = buildHttpPost(yuqueApiBase+"/users/"+userId+"/repos",map);
+        HttpRespVo vo = doRequest(httpPost);
+        //转json
+        JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
+        //转user
+        BookSerializer bookSerializer = JSONObject.toJavaObject(json,BookSerializer.class);
+        return bookSerializer;
+    }
+
+    /**
+     * 往自己下面创建知识库 by Login
+     * @param userLogin
+     * @param createPo
+     * @return
+     * @throws YuqueException
+     */
+    public BookSerializer createUserRepoByLogin(String userLogin,RepoCreatePo createPo) throws YuqueException {
+        return this.createUserRepoById(userLogin,createPo);
+    }
+
+    /**
+     * 获取知识库详情 by repoId
+     * @param repoId
+     * @return
+     * @throws YuqueException
+     */
+    public BookSerializer getRepoDetailById(String repoId) throws YuqueException {
+        HttpGet httpGet = buildHttpGet(yuqueApiBase+"/repos/"+repoId);
+        //发送请求
+        HttpRespVo vo = doRequest(httpGet);
+        //转jsonArr
+        JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
+        //转实体
+        BookSerializer bookSerializer =  JSONObject.toJavaObject(json,BookSerializer.class);
+        return bookSerializer;
+    }
+
+    /**
+     * 获取知识库详情 by nameSpace
+     * @param nameSpace
+     * @return
+     * @throws YuqueException
+     */
+    public BookSerializer getRepoDetailByNameSpace(String nameSpace) throws YuqueException {
+        return this.getRepoDetailById(nameSpace);
+    }
+
+    /**
+     * 更新知识库信息 by repoId
+     * @param repoId
+     * @param updatePo
+     * @return
+     * @throws YuqueException
+     */
+    public BookSerializer updateRepoById(String repoId,RepoCreatePo updatePo) throws YuqueException {
+        Map<String, String> map = null;
+        try {
+            map = BeanUtils.describe(updatePo);
+            map.put("public",updatePo.getPublic_id().toString());
+            map.remove("public_id");
+
+        }catch (Exception e){
+            throw new YuqueException(e.getMessage(),e);
+        }
+        HttpPut httpPut = buildHttpPut(yuqueApiBase+"/repos/"+repoId,map);
+        HttpRespVo vo = doRequest(httpPut);
+        //转json
+        JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
+        //转user
+        BookSerializer bookSerializer = JSONObject.toJavaObject(json,BookSerializer.class);
+        return bookSerializer;
+    }
+
+    /**
+     * 更新知识库信息 by nameSpace
+     * @param nameSpace
+     * @param updatePo
+     * @return
+     * @throws YuqueException
+     */
+    public BookSerializer updateRepoByNameSpace(String nameSpace,RepoCreatePo updatePo) throws YuqueException {
+        return this.updateRepoById(nameSpace,updatePo);
+    }
+    /**
+     * 删除知识库 by Id
+     * @param repoId
+     * @throws YuqueException
+     */
+    public BookSerializer deleteRepoById(String repoId) throws YuqueException {
+        HttpDelete httpDelete = buildHttpDelete(yuqueApiBase+"/repos/"+repoId,null);
+        HttpRespVo vo = doRequest(httpDelete);
+        //转json
+        JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
+        //转user
+        BookSerializer bookSerializer = JSONObject.toJavaObject(json,BookSerializer.class);
+
+        return bookSerializer;
+    }
+
+    /**
+     * 删除知识库 by nameSpace
+     * @param nameSpace
+     * @return
+     * @throws YuqueException
+     */
+    public BookSerializer deleteRepoByNameSpace(String nameSpace) throws YuqueException {
+        return this.deleteRepoById(nameSpace);
+    }
+
+    /**
+     * 获取某仓库的目录 by nameSpace
+     * @param nameSpace
+     * @return
+     * @throws YuqueException
+     */
+    public List<TocSerializer> listTocByNameSpace(String nameSpace) throws YuqueException {
+        HttpGet httpGet = buildHttpGet(yuqueApiBase+"/repos/"+nameSpace+"/toc");
+        //发送请求
+        HttpRespVo vo = doRequest(httpGet);
+        //转jsonArr
+        JSONArray jsonArray = JSONObject.parseObject(vo.getHttpContent()).getJSONArray("data");
+        //转实体
+        List<TocSerializer> tocSerializerList = JSONObject.parseArray(jsonArray.toJSONString(), TocSerializer.class);
+        return tocSerializerList;
+    }
+
+    /**
+     * 获取一个仓库的文档列表 by NameSpace
+     * @param nameSpace
+     * @return
+     * @throws YuqueException
+     */
+    public List<DocSerializer> listDocByNameSpace(String nameSpace) throws YuqueException {
+        HttpGet httpGet = buildHttpGet(yuqueApiBase+"/repos/"+nameSpace+"/docs");
+        //发送请求
+        HttpRespVo vo = doRequest(httpGet);
+        //转jsonArr
+        JSONArray jsonArray = JSONObject.parseObject(vo.getHttpContent()).getJSONArray("data");
+        //转实体
+        List<DocSerializer> docSerializerList = JSONObject.parseArray(jsonArray.toJSONString(), DocSerializer.class);
+        return docSerializerList;
+    }
+
+    /**
+     * 获取一个仓库的文档列表 by repoId
+     * @param repoId
+     * @return
+     * @throws YuqueException
+     */
+    public List<DocSerializer> listDocByRepoId(String repoId) throws YuqueException {
+        return this.listDocByNameSpace(repoId);
+    }
+
+    /**
+     * 获取单篇文档的详细信息 by slug
+     * @param nameSpace
+     * @param slug
+     * @return docSerializer
+     * @throws YuqueException
+     */
+    public DocSerializer getDocDetailBySlug(String nameSpace,String slug) throws YuqueException {
+        HttpGet httpGet = buildHttpGet(yuqueApiBase+"/repos/"+nameSpace+"/docs/"+slug);
+        //发送请求
+        HttpRespVo vo = doRequest(httpGet);
+        //转json
+        JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
+        //转user
+        DocSerializer docSerializer = JSONObject.toJavaObject(json,DocSerializer.class);
+        return docSerializer;
+    }
+
+    /**
+     * 创建文档 by nameSpace
+     * @param nameSpace
+     * @param createPo
+     * @return
+     * @throws YuqueException
+     */
+    public DocSerializer createDocByNameSpace(String nameSpace, DocCreatePo createPo) throws YuqueException {
+        Map<String, String> map = null;
+        try {
+            map = BeanUtils.describe(createPo);
+            map.put("public",createPo.getPublic_id().toString());
+            map.remove("public_id");
+
+        }catch (Exception e){
+            throw new YuqueException(e.getMessage(),e);
+        }
+        HttpPost httpPost = buildHttpPost(yuqueApiBase+"/repos/"+nameSpace+"/docs",map);
+        HttpRespVo vo = doRequest(httpPost);
+        //转json
+        JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
+        //转实体
+        DocSerializer docSerializer = JSONObject.toJavaObject(json,DocSerializer.class);
+        return docSerializer;
+    }
+
+    /**
+     * 创建文档 by repoId
+     * @param repoId
+     * @param createPo
+     * @return
+     * @throws YuqueException
+     */
+    public DocSerializer createDocByRepoId(String repoId, DocCreatePo createPo) throws YuqueException {
+        return this.createDocByNameSpace(repoId,createPo);
+    }
+
+    /**
+     * 更新文档 by nameSpace
+     * @param nameSpace
+     * @param docId
+     * @param updatePo
+     * @return
+     * @throws YuqueException
+     */
+    public DocSerializer updateDocByNameSpace(String nameSpace,String docId,DocCreatePo updatePo) throws YuqueException {
+        Map<String, String> map = null;
+        try {
+            map = BeanUtils.describe(updatePo);
+            map.put("public",updatePo.getPublic_id().toString());
+            map.remove("public_id");
+
+        }catch (Exception e){
+            throw new YuqueException(e.getMessage(),e);
+        }
+        HttpPut httpPut = buildHttpPut(yuqueApiBase+"/repos/"+nameSpace+"/docs/"+docId,map);
+        HttpRespVo vo = doRequest(httpPut);
+        //转json
+        JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
+        //转实体
+        DocSerializer docSerializer = JSONObject.toJavaObject(json,DocSerializer.class);
+        return docSerializer;
+    }
+
+    /**
+     * 更新文档 by repoId
+     * @param repoId
+     * @param docId
+     * @param updatePo
+     * @return
+     * @throws YuqueException
+     */
+    public DocSerializer updateDocByRepoId(String repoId,String docId,DocCreatePo updatePo) throws YuqueException {
+        return this.updateDocByNameSpace(repoId,docId,updatePo);
+    }
+
+    /**
+     * 删除文档 by repoId
+     * @param repoId
+     * @param docId
+     * @return
+     * @throws YuqueException
+     */
+    public DocSerializer deleteDocByRepoId(String repoId,String docId) throws YuqueException {
+        HttpDelete httpDelete = buildHttpDelete(yuqueApiBase+"/repos/"+repoId+"/docs/"+docId,null);
+        HttpRespVo vo = doRequest(httpDelete);
+        //转json
+        JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
+        //转user
+        DocSerializer docSerializer = JSONObject.toJavaObject(json,DocSerializer.class);
+        return docSerializer;
     }
 }

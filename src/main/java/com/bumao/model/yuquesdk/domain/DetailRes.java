@@ -10,6 +10,6 @@ import lombok.Data;
  **/
 @Data
 public class DetailRes {
-    private BookDetailSerializer data;
+    private BookSerializer data;
 
 }
