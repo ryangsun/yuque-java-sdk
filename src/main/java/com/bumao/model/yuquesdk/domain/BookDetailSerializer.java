@@ -1,15 +1,16 @@
 package com.bumao.model.yuquesdk.domain;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
-
-import java.time.LocalDateTime;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * 仓库信息
  * https://www.yuque.com/yuque/developer/bookserializer
  */
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class BookDetailSerializer extends BookSerializer {
     /**
      * 目录原文

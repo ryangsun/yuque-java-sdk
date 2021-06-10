@@ -1,5 +1,6 @@
 package com.bumao.model.yuquesdk.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bumao.model.yuquesdk.domain.*;
 import com.bumao.model.yuquesdk.exception.YuqueException;
 import org.junit.Test;
@@ -16,9 +17,10 @@ public class HttpClientDemo extends HttpClientHolder {
 //        UserDetailSerializer userDetailSerializer = client.getUserInfoById("1757692");
 //        System.out.println(userDetailSerializer);
 
-//        System.out.println("--获取某个用户信息 by Login--");
-//        UserDetailSerializer user1 = client.getUserInfoByLogin("zhangxin_ux");
-//        System.out.println(user1);
+        System.out.println("--获取某个用户信息 by Login--");
+        UserDetailSerializer user1 = client.getUserInfoByLogin("zhangxin_ux");
+        System.out.println(user1);
+        System.out.println(JSONObject.toJSONString(user1) );
 //
 //        System.out.println("--获取当前用户信息--");
 //        UserDetailSerializer user2 = client.getCurrUserInfo();
@@ -27,7 +29,7 @@ public class HttpClientDemo extends HttpClientHolder {
 
     @Test
     public void TestGroup() throws YuqueException {
-        YuqueClient client = new YuqueClient("aaa");
+        YuqueClient client = new YuqueClient("yuque-token");
 
 //        System.out.println("--获取某个用户的加入的组织列表 by Id--");
 //        List<GroupSerializer> groupList = client.listJoinedGroupById("1757692");
@@ -45,8 +47,11 @@ public class HttpClientDemo extends HttpClientHolder {
 //        List<GroupSerializer> groupList2 = client.listPublicGroup(99);
 //        System.out.println(groupList2);
 //        System.out.println(groupList2.size());
-//
+
 //        System.out.println("--获取单个组织的详细信息--");
+//        /**
+//         * todo 应返回三个对象
+//         */
 //        GroupSerializer group = client.getGroupInfoById("firstGroup");
 //        System.out.println(group);
 
@@ -85,9 +90,9 @@ public class HttpClientDemo extends HttpClientHolder {
 //            System.out.println(e);
 //        }
 
-        System.out.println("--获取组织成员信息--");
-        List<GroupUserSerializer> groupUserSerializerList = client.listGroupUserById("firstGroup");
-        System.out.println(groupUserSerializerList);
+//        System.out.println("--获取组织成员信息--");
+//        List<GroupUserSerializer> groupUserSerializerList = client.listGroupUserById("firstGroup");
+//        System.out.println(groupUserSerializerList);
 
 //        System.out.println("--增加或更新组织成员--");
 //        GroupUserSerializer UpgroupUserSerializer = client.updateGroupUserbyId("firstGroup","zhangxin_ux",1);
@@ -97,16 +102,15 @@ public class HttpClientDemo extends HttpClientHolder {
 //        GroupUserSerializer DelgroupUserSerializer = client.deleteGroupUserbyId("firstGroup","zhangxin_ux");
 //        System.out.println(DelgroupUserSerializer);
 
-
     }
 
     @Test
     public void TestRepo() throws YuqueException {
         YuqueClient client = new YuqueClient("yuque-token");
 
-        System.out.println("--获取某个用户的知识库列表 by Id--");
-        List<BookSerializer> bookSerializerList = client.listUserReposById("u1486894","all",0);
-        System.out.println(bookSerializerList);
+//        System.out.println("--获取某个用户的知识库列表 by Id--");
+//        List<BookSerializer> bookSerializerList = client.listUserReposById("u1486894","all",0);
+//        System.out.println(bookSerializerList);
 
 //        System.out.println("--获取某个团队的知识库列表 by Id--");
 //        List<BookSerializer> groupbookSerializerList = client.listGroupReposById("firstgroup","all",0);
@@ -133,6 +137,9 @@ public class HttpClientDemo extends HttpClientHolder {
 //        System.out.println(bookSerializer);
 //
 //        System.out.println("--获取知识库详情 by Id--");
+        /*
+        todo 权限项目
+         */
 //        BookSerializer bookSerializerDetail = client.getRepoDetailById("20113349");
 //        System.out.println(bookSerializerDetail);
 
@@ -163,13 +170,16 @@ public class HttpClientDemo extends HttpClientHolder {
     public void TestDoc() throws YuqueException {
         YuqueClient client = new YuqueClient("yuque-token");
 
-        System.out.println("--获取一个仓库的文档列表 by nameSpace--");
-        List<DocSerializer> docSerializerList = client.listDocByNameSpace("20113349");
-        System.out.println(docSerializerList);
+//        System.out.println("--获取一个仓库的文档列表 by nameSpace--");
+//        List<DocSerializer> docSerializerList = client.listDocByNameSpace("20113349");
+//        System.out.println(docSerializerList);
 
-//        System.out.println("--获取单篇文档的详细信息 by slug--");
-//        DocSerializer docSerializer = client.getDocDetailBySlug("u1486894/nn3k9e","helloword1");
-//        System.out.println(docSerializer);
+        System.out.println("--获取单篇文档的详细信息 by slug--");
+        /*
+        todo 还有属性
+         */
+        DocDetailSerializer docDetailSerializer = client.getDocDetailBySlug("u1486894/nn3k9e","hgg9lg");
+        System.out.println(docDetailSerializer);
 
 //        System.out.println("--创建文档 by nameSpace--");
 //        DocCreatePo createPo = new DocCreatePo();
@@ -191,8 +201,8 @@ public class HttpClientDemo extends HttpClientHolder {
 //        DocSerializer docSerializerUp = client.updateDocByNameSpace("u1486894/nn3k9e","46939700",upPo);
 //        System.out.println(docSerializerUp);
 
-        System.out.println("--删除文档 by repoId--");
-        DocSerializer docSerializerDel = client.deleteDocByRepoId("20113349","46939326");
-        System.out.println(docSerializerDel);
+//        System.out.println("--删除文档 by repoId--");
+//        DocSerializer docSerializerDel = client.deleteDocByRepoId("20113349","46939326");
+//        System.out.println(docSerializerDel);
     }
 }

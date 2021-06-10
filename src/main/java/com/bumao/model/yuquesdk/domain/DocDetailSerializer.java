@@ -1,7 +1,8 @@
 package com.bumao.model.yuquesdk.domain;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -9,6 +10,8 @@ import java.time.LocalDateTime;
  *  https://www.yuque.com/yuque/developer/docdetailserializer
  **/
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class DocDetailSerializer extends DocSerializer {
     /**
      * 仓库编号，就是 repo_id

@@ -1,14 +1,15 @@
 package com.bumao.model.yuquesdk.domain;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
-
-import java.time.LocalDateTime;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * 语雀团队的实体类
  */
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class GroupDetailSerializer extends GroupSerializer {
     /**
      * space_id

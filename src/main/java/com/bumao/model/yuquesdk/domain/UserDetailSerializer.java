@@ -1,15 +1,16 @@
 package com.bumao.model.yuquesdk.domain;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
-
-import java.time.LocalDateTime;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * 语雀用户的实体类
  * https://www.yuque.com/yuque/developer/userdetailserializer
  */
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class UserDetailSerializer extends UserSerializer {
     /**
      *  企业空间编号
@@ -20,11 +21,6 @@ public class UserDetailSerializer extends UserSerializer {
      */
     private String account_id;
     /**
-     * 团队创建人，仅适用于 type - 'Group'
-     */
-    private String owner_id;
-
-    /**
      * 仓库数量
      */
     private Integer books_count;
@@ -32,14 +28,6 @@ public class UserDetailSerializer extends UserSerializer {
      * 公开仓库数量
      */
     private Integer public_books_count;
-    /**
-     *  - 团队成员数量
-     */
-    private Integer members_count;
-    /**
-     * 描述
-     */
-    private String description;
     /**
      * following_count
      */

@@ -79,7 +79,7 @@ public class YuqueClient extends HttpClientHolder{
         HttpGet httpGet = buildHttpGet(yuqueApiBase+"/users/"+userId+"/groups");
         //发送请求
         HttpRespVo vo = doRequest(httpGet);
-        System.out.println(vo);
+//        System.out.println(vo);
         //转jsonArr
         JSONArray jsonArray = JSONObject.parseObject(vo.getHttpContent()).getJSONArray("data");
         //转实体
@@ -135,6 +135,7 @@ public class YuqueClient extends HttpClientHolder{
         HttpGet httpGet = buildHttpGet(yuqueApiBase+"/groups/"+groupId);
         //发送请求
         HttpRespVo vo = doRequest(httpGet);
+//        System.out.println(vo);
         //转json
         JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
         //转实体
@@ -480,7 +481,7 @@ public class YuqueClient extends HttpClientHolder{
         HttpGet httpGet = buildHttpGet(yuqueApiBase+"/repos/"+repoId);
         //发送请求
         HttpRespVo vo = doRequest(httpGet);
-        System.out.println(vo);
+//        System.out.println(vo);
         //转jsonArr
         JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
         //转实体
@@ -615,6 +616,7 @@ public class YuqueClient extends HttpClientHolder{
         HttpGet httpGet = buildHttpGet(yuqueApiBase+"/repos/"+nameSpace+"/docs/"+slug);
         //发送请求
         HttpRespVo vo = doRequest(httpGet);
+//        System.out.println(vo);
         //转json
         JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
         //转user

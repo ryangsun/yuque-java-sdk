@@ -39,5 +39,8 @@ public class UserSerializer {
      */
     private LocalDateTime updated_at;
 
-
+    /**
+     * 描述(从detail迁移过来)
+     */
+    private String description;
 }
