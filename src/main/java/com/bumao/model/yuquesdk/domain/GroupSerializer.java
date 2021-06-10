@@ -6,11 +6,12 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 语雀用户/团队的实体类
+ * 语雀团队的实体类
  * https://www.yuque.com/yuque/developer/userserializer
+ * API多了字段也不解释
  */
 @Data
-public class UserSerializer {
+public class GroupSerializer {
     /**
      * 用户编号
      */
@@ -44,6 +45,10 @@ public class UserSerializer {
      */
     private String description;
     /**
+     * public_topics_count
+     */
+    private Integer public_topics_count;
+    /**
      * books_count
      */
     private Integer books_count;
@@ -52,24 +57,16 @@ public class UserSerializer {
      */
     private Integer public_books_count;
     /**
-     * account_id
+     * topics_count
      */
-    private Long account_id;
+    private Integer topics_count;
     /**
      * public
      */
-    @JSONField(name = "public")
+    @JSONField(name ="public")
     private Integer public_id;
     /**
-     * following_count
+     * members_count
      */
-    private Integer following_count;
-    /**
-     * followers_count
-     */
-    private Integer followers_count;
-    /**
-     * space_id
-     */
-    private Long space_id;
+    private Integer members_count;
 }

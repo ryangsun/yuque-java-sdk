@@ -10,10 +10,7 @@ import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -83,6 +80,54 @@ public class HttpClientHolder {
         return httpPost;
     }
     /**
+     * 造PUT
+     * @param URI
+     * @param map
+     * @return
+     * @throws YuqueException
+     */
+    public HttpPut buildHttpPut(String URI, Map<String,String> map) throws YuqueException {
+        HttpPut httpPut = null;
+        try {
+            URIBuilder builder = new URIBuilder(URI);
+            if(map!=null) {
+                List<NameValuePair> pairs = new ArrayList<>();
+                for (Map.Entry<String, String> entry : map.entrySet()) {
+                    pairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+                }
+                builder.setParameters(pairs);
+            }
+            httpPut = new HttpPut(builder.build());
+        }catch (URISyntaxException e){
+            throw new YuqueException(e.getMessage(),e);
+        }
+        return httpPut;
+    }
+    /**
+     * 造HttpDelete
+     * @param URI
+     * @param map
+     * @return
+     * @throws YuqueException
+     */
+    public HttpDelete buildHttpDelete(String URI, Map<String,String> map) throws YuqueException {
+        HttpDelete httpDelete = null;
+        try {
+            URIBuilder builder = new URIBuilder(URI);
+            if(map!=null) {
+                List<NameValuePair> pairs = new ArrayList<>();
+                for (Map.Entry<String, String> entry : map.entrySet()) {
+                    pairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+                }
+                builder.setParameters(pairs);
+            }
+            httpDelete = new HttpDelete(builder.build());
+        }catch (URISyntaxException e){
+            throw new YuqueException(e.getMessage(),e);
+        }
+        return httpDelete;
+    }
+    /**
      * 发送http请求
      * @param httpRequestBase
      * @return
@@ -111,33 +156,25 @@ public class HttpClientHolder {
                 vo.setHttpContent(EntityUtils.toString(responseEntity));
             }
             if( !vo.getHttpCode().equals(200) ){
-                //处理400问题
-                if(vo.getHttpCode().equals(400)){
-                    Map<String,String> digMap = dig400(vo.getHttpContent());
-                    if(digMap==null){
-                        throw new YuqueException(
-                            vo.getHttpCode(),
-                            vo.getHttpStatusLine(),
-                            vo.getHttpContent(),
-                            "unknow Message",
-                            "unknow Code"
-                        );
-                    }else{
-                        throw new YuqueException(
-                                vo.getHttpCode(),
-                                vo.getHttpStatusLine(),
-                                vo.getHttpContent(),
-                                digMap.get("message"),
-                                digMap.get("code")
-                        );
-                    }
-                }else {
-                    throw new YuqueException.Builder()
-                            .setHttpCode(vo.getHttpCode())
-                            .setHttpStatusLine(vo.getHttpStatusLine())
-                            .setOrigContent(vo.getHttpContent())
-                            .setCustomErrorMsg("返回代码非200")
-                            .build();
+                Map<String,String> digMap = dig400(vo.getHttpContent());
+                if(digMap==null){
+                    throw new YuqueException(
+                        vo.getHttpCode(),
+                        vo.getHttpStatusLine(),
+                        vo.getHttpContent(),
+                        "unknow Message",
+                        "unknow Code",
+                        -1
+                    );
+                }else{
+                    throw new YuqueException(
+                        vo.getHttpCode(),
+                        vo.getHttpStatusLine(),
+                        vo.getHttpContent(),
+                        digMap.get("message"),
+                        digMap.get("code"),
+                        Integer.parseInt(digMap.get("status")==null?"-1":digMap.get("status"))
+                    );
                 }
             }
         } catch (ClientProtocolException e) {
@@ -167,6 +204,7 @@ public class HttpClientHolder {
             JSONObject json = JSONObject.parseObject(content);
             map.put("message",json.getString("message"));
             map.put("code",json.getString("code"));
+            map.put("status",json.getString("status"));
             return map;
         }catch (Exception e){
             return null;

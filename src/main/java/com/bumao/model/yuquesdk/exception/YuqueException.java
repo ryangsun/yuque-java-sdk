@@ -2,6 +2,7 @@ package com.bumao.model.yuquesdk.exception;
 
 import com.google.common.base.Joiner;
 import lombok.Data;
+import org.omg.PortableInterceptor.INACTIVE;
 
 @Data
 public class YuqueException extends Exception {
@@ -18,10 +19,23 @@ public class YuqueException extends Exception {
     private String origContent;
 
     private String customErrorMsg;
+    private String origMsg;
+    private String origCode;
+    private Integer origStatus;
 
     public YuqueException(String errMsg) {
         super(errMsg);
         this.customErrorMsg = errMsg;
+    }
+
+    public YuqueException(Integer httpCode, String httpStatusLine, String origContent, String origMsg, String origCode, Integer origStatus){
+        super(origMsg);
+        this.httpCode = httpCode;
+        this.httpStatusLine = httpStatusLine;
+        this.origContent = origContent;
+        this.origCode = origCode;
+        this.origMsg = origMsg;
+        this.origStatus = origStatus;
     }
 
     public YuqueException(String errMsg, Throwable tr) {
