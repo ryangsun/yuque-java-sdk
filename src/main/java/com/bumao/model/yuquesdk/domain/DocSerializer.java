@@ -23,45 +23,13 @@ public class DocSerializer {
      */
     private String title;
     /**
-     * book_id - 仓库编号，就是 repo_id
-     */
-    private String book_id;
-    /**
-     *  仓库信息 <BookSerializer>，就是 repo 信息
-     */
-    private BookSerializer book;
-    /**
      * 用户/团队编号
      */
     private String user_id;
     /**
-     * 用户/团队信息 <UserSerializer>
-     */
-    private UserSerializer user;
-    /**
      * 描述了正文的格式 [asl, markdown]
      */
     private String format;
-    /**
-     *  - 正文 Markdown 源代码
-     */
-    private String body;
-    /**
-     *  - 草稿 Markdown 源代码
-     */
-    private String body_draft;
-    /**
-     *  - 转换过后的正文 HTML
-     */
-    private String body_html;
-    /**
-     *  - 语雀 lake 格式的文档内容
-     */
-    private String body_lake;
-    /**
-     *  - 文档创建人 User Id
-     */
-    private String creator_id;
     /**
      *  - 公开级别 [0 - 私密, 1 - 公开]
      */
@@ -78,15 +46,23 @@ public class DocSerializer {
     /**
      * 评论数量
      */
-    private Integer comments_count ;
+    private Integer comments_count;
     /**
      * 文档内容更新时间
      */
     private LocalDateTime content_updated_at;
     /**
-     * 删除时间，未删除为 null
+     *  仓库信息 <BookSerializer>，就是 repo 信息
      */
-    private LocalDateTime deleted_at;
+    private BookSerializer book;
+    /**
+     * 用户/团队信息 <UserSerializer>
+     */
+    private UserSerializer user;
+    /**
+     * <UserSerializer> 最后修改人
+     */
+    private UserSerializer last_editor;
     /**
      * 创建时间
      */

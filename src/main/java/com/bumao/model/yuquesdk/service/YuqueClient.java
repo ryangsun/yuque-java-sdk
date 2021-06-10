@@ -476,15 +476,16 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public BookSerializer getRepoDetailById(String repoId) throws YuqueException {
+    public BookDetailSerializer getRepoDetailById(String repoId) throws YuqueException {
         HttpGet httpGet = buildHttpGet(yuqueApiBase+"/repos/"+repoId);
         //发送请求
         HttpRespVo vo = doRequest(httpGet);
+        System.out.println(vo);
         //转jsonArr
         JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
         //转实体
-        BookSerializer bookSerializer =  JSONObject.toJavaObject(json,BookSerializer.class);
-        return bookSerializer;
+        BookDetailSerializer bookDetailSerializer =  JSONObject.toJavaObject(json,BookDetailSerializer.class);
+        return bookDetailSerializer;
     }
 
     /**
@@ -610,15 +611,15 @@ public class YuqueClient extends HttpClientHolder{
      * @return docSerializer
      * @throws YuqueException
      */
-    public DocSerializer getDocDetailBySlug(String nameSpace,String slug) throws YuqueException {
+    public DocDetailSerializer getDocDetailBySlug(String nameSpace,String slug) throws YuqueException {
         HttpGet httpGet = buildHttpGet(yuqueApiBase+"/repos/"+nameSpace+"/docs/"+slug);
         //发送请求
         HttpRespVo vo = doRequest(httpGet);
         //转json
         JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
         //转user
-        DocSerializer docSerializer = JSONObject.toJavaObject(json,DocSerializer.class);
-        return docSerializer;
+        DocDetailSerializer docDetailSerializer = JSONObject.toJavaObject(json,DocDetailSerializer.class);
+        return docDetailSerializer;
     }
 
     /**

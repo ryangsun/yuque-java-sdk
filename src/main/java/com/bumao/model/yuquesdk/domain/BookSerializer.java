@@ -7,9 +7,7 @@ import java.time.LocalDateTime;
 
 /**
  * 仓库信息
- * https://www.yuque.com/yuque/developer/bookdetailserializer
  * https://www.yuque.com/yuque/developer/bookserializer
- * 以上两个整合
  */
 @Data
 public class BookSerializer {
@@ -46,10 +44,6 @@ public class BookSerializer {
      */
     private String description;
     /**
-     * 目录原文
-     */
-    private String toc_yml;
-    /**
      *  - 创建人 User Id
      */
     private String creator_id;
@@ -58,10 +52,6 @@ public class BookSerializer {
      */
     @JSONField(name="public")
     private Integer public_id;
-    /**
-     * - 文档数量
-     */
-    private Integer items_count;
     /**
      *  - 喜欢数量
      */
