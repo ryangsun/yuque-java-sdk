@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 
 /**
  * 语雀团队的实体类
- * https://www.yuque.com/yuque/developer/userserializer
- * API多了字段也不解释
  */
 @Data
 public class GroupSerializer {
@@ -17,21 +15,50 @@ public class GroupSerializer {
      */
     private String id;
     /**
-     * 类型 [`User`  - 用户, Group - 团队]
-     */
-    private String type;
-    /**
-     * 用户个人路径
+     * Login
      */
     private String login;
     /**
-     * 昵称
+     * 名称
      */
     private String name;
     /**
      * 头像 URL
      */
     private String avatar_url;
+    /**
+     * 该组织包含几个repo
+     */
+    private Integer books_count;
+    /**
+     * 该组织包含几个公开的repo
+     */
+    private Integer public_books_count;
+    /**
+     * topics_count
+     */
+    private Integer topics_count;
+    /**
+     * public_topics_count
+     */
+    private Integer public_topics_count;
+    /**
+     * members_count
+     */
+    private Integer members_count;
+    /**
+     * 类型 [`User`  - 用户, Group - 团队]
+     */
+    private String type;
+    /**
+     * public
+     */
+    @JSONField(name ="public")
+    private Integer public_id;
+    /**
+     * 描述
+     */
+    private String description;
     /**
      * 创建时间
      */
@@ -40,33 +67,6 @@ public class GroupSerializer {
      * 更新时间
      */
     private LocalDateTime updated_at;
-    /**
-     * 描述
-     */
-    private String description;
-    /**
-     * public_topics_count
-     */
-    private Integer public_topics_count;
-    /**
-     * books_count
-     */
-    private Integer books_count;
-    /**
-     * public_books_count
-     */
-    private Integer public_books_count;
-    /**
-     * topics_count
-     */
-    private Integer topics_count;
-    /**
-     * public
-     */
-    @JSONField(name ="public")
-    private Integer public_id;
-    /**
-     * members_count
-     */
-    private Integer members_count;
+
+
 }

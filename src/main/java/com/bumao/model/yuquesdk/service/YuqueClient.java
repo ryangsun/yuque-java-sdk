@@ -4,6 +4,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bumao.model.yuquesdk.domain.*;
 import com.bumao.model.yuquesdk.exception.YuqueException;
+import com.bumao.model.yuquesdk.po.DocCreatePo;
+import com.bumao.model.yuquesdk.po.GroupCreatePo;
+import com.bumao.model.yuquesdk.po.RepoCreatePo;
+import com.bumao.model.yuquesdk.vo.HttpRespVo;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -26,15 +30,14 @@ public class YuqueClient extends HttpClientHolder{
      * 获取单个用户信息-by id
      * @param Id
      */
-    public UserSerializer getUserInfoById(String Id) throws YuqueException {
+    public UserDetailSerializer getUserInfoById(String Id) throws YuqueException {
         HttpGet httpGet = buildHttpGet(yuqueApiBase+"/users/"+Id);
         //发送请求
         HttpRespVo vo = doRequest(httpGet);
-        //转json
+        //转JSONObject
         JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
-//        System.out.println(json);
-        //转user
-        UserSerializer user = JSONObject.toJavaObject(json,UserSerializer.class);
+        //转实体
+        UserDetailSerializer user = JSONObject.toJavaObject(json,UserDetailSerializer.class);
 
         return user;
     }
@@ -45,7 +48,7 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public UserSerializer getUserInfoByLogin(String Login) throws YuqueException {
+    public UserDetailSerializer getUserInfoByLogin(String Login) throws YuqueException {
         return this.getUserInfoById(Login);
     }
 
@@ -54,14 +57,14 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public UserSerializer getCurrUserInfo() throws YuqueException {
+    public UserDetailSerializer getCurrUserInfo() throws YuqueException {
         HttpGet httpGet = buildHttpGet(yuqueApiBase+"/user");
         //发送请求
         HttpRespVo vo = doRequest(httpGet);
-        //转json
+        //转JSONObject
         JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
-        //转user
-        UserSerializer user = JSONObject.toJavaObject(json,UserSerializer.class);
+        //转实体
+        UserDetailSerializer user = JSONObject.toJavaObject(json,UserDetailSerializer.class);
 
         return user;
     }
@@ -72,17 +75,15 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public List<GroupSerializer> getJoinedGroupById(String userId) throws YuqueException {
+    public List<GroupSerializer> listJoinedGroupById(String userId) throws YuqueException {
         HttpGet httpGet = buildHttpGet(yuqueApiBase+"/users/"+userId+"/groups");
         //发送请求
         HttpRespVo vo = doRequest(httpGet);
-//        System.out.println(vo);
+        System.out.println(vo);
         //转jsonArr
         JSONArray jsonArray = JSONObject.parseObject(vo.getHttpContent()).getJSONArray("data");
-//        System.out.println(jsonArray);
-        //转user
+        //转实体
         List<GroupSerializer> groupSerializerList = JSONObject.parseArray(jsonArray.toJSONString(), GroupSerializer.class);
-//        System.out.println(groupSerializerList);
 
         return groupSerializerList;
     }
@@ -93,8 +94,8 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public List<GroupSerializer> getJoinedGroupByLogin(String Login) throws YuqueException {
-        return this.getJoinedGroupById(Login);
+    public List<GroupSerializer> listJoinedGroupByLogin(String Login) throws YuqueException {
+        return this.listJoinedGroupById(Login);
     }
 
     /**
@@ -102,10 +103,10 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public List<GroupSerializer> getPublicGroup() throws YuqueException {
-        return this.getPublicGroup(1);
+    public List<GroupSerializer> listPublicGroup() throws YuqueException {
+        return this.listPublicGroup(0);
     }
-    public List<GroupSerializer> getPublicGroup(Integer offset) throws YuqueException {
+    public List<GroupSerializer> listPublicGroup(Integer offset) throws YuqueException {
         Map<String,String> para = new HashMap<String, String>();
         if(offset==null||offset<1){
             offset = 0;
@@ -130,16 +131,14 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public GroupSerializer getGroupInfoById(String groupId) throws YuqueException {
+    public GroupDetailSerializer getGroupInfoById(String groupId) throws YuqueException {
         HttpGet httpGet = buildHttpGet(yuqueApiBase+"/groups/"+groupId);
         //发送请求
         HttpRespVo vo = doRequest(httpGet);
-//        System.out.println(vo);
         //转json
         JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
-//        System.out.println(json);
-        //转user
-        GroupSerializer group = JSONObject.toJavaObject(json,GroupSerializer.class);
+        //转实体
+        GroupDetailSerializer group = JSONObject.toJavaObject(json,GroupDetailSerializer.class);
 
         return group;
     }
@@ -231,17 +230,16 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public List<GroupUserSerializer> getGroupUserById(String groupId) throws YuqueException {
+    public List<GroupUserSerializer> listGroupUserById(String groupId) throws YuqueException {
         HttpGet httpGet = buildHttpGet(yuqueApiBase+"/groups/"+groupId+"/users");
         //发送请求
         HttpRespVo vo = doRequest(httpGet);
 //        System.out.println(vo);
-
         //转jsonArr
         JSONArray jsonArray = JSONObject.parseObject(vo.getHttpContent()).getJSONArray("data");
-        //转user
+        //转实体
         List<GroupUserSerializer> groupUserSerializerList = JSONObject.parseArray(jsonArray.toJSONString(), GroupUserSerializer.class);
-//        System.out.println(groupUserSerializerList);
+
         return groupUserSerializerList;
     }
 
@@ -251,8 +249,8 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public List<GroupUserSerializer> getGroupUserByLogin(String Login) throws YuqueException {
-        return this.getGroupUserById(Login);
+    public List<GroupUserSerializer> listGroupUserByLogin(String Login) throws YuqueException {
+        return this.listGroupUserById(Login);
     }
 
     /**
@@ -271,7 +269,7 @@ public class YuqueClient extends HttpClientHolder{
         HttpRespVo vo = doRequest(httpPut);
         //转json
         JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
-        //转user
+        //转实体
         GroupUserSerializer groupUser = JSONObject.toJavaObject(json,GroupUserSerializer.class);
         return groupUser;
     }
@@ -298,10 +296,9 @@ public class YuqueClient extends HttpClientHolder{
     public GroupUserSerializer deleteGroupUserbyId(String groupId,String userLogin) throws YuqueException {
         HttpDelete httpDelete = buildHttpDelete(yuqueApiBase+"/groups/"+groupId+"/users/"+userLogin,null);
         HttpRespVo vo = doRequest(httpDelete);
-//        System.out.println(vo);
         //转json
         JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
-        //转user
+        //转实体
         GroupUserSerializer groupUser = JSONObject.toJavaObject(json,GroupUserSerializer.class);
         return groupUser;
     }
@@ -406,7 +403,7 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public BookSerializer createGroupRepoById(String groupId,RepoCreatePo createPo) throws YuqueException {
+    public BookSerializer createGroupRepoById(String groupId, RepoCreatePo createPo) throws YuqueException {
         Map<String, String> map = null;
         try {
             map = BeanUtils.describe(createPo);

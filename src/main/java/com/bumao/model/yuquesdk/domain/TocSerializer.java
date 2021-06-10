@@ -2,6 +2,10 @@ package com.bumao.model.yuquesdk.domain;
 
 import lombok.Data;
 
+/**
+ * 目录实体
+ * 语雀无对应介绍页面
+ */
 @Data
 public class TocSerializer {
     /**

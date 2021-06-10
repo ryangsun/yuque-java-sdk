@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * https://www.yuque.com/yuque/developer/groupuserserializer
+ */
 @Data
 public class GroupUserSerializer {
     /**

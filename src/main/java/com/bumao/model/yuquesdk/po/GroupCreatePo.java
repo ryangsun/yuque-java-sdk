@@ -1,4 +1,4 @@
-package com.bumao.model.yuquesdk.domain;
+package com.bumao.model.yuquesdk.po;
 
 import lombok.Data;
 

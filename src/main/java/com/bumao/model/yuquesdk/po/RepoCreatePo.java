@@ -1,7 +1,10 @@
-package com.bumao.model.yuquesdk.domain;
+package com.bumao.model.yuquesdk.po;
 
 import lombok.Data;
 
+/**
+ * 创建/更新仓库的实体
+ */
 @Data
 public class RepoCreatePo {
     /**

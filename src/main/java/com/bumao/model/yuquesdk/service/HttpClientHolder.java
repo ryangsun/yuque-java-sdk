@@ -1,7 +1,7 @@
 package com.bumao.model.yuquesdk.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.bumao.model.yuquesdk.domain.HttpRespVo;
+import com.bumao.model.yuquesdk.vo.HttpRespVo;
 import com.bumao.model.yuquesdk.exception.YuqueException;
 import lombok.Data;
 import org.apache.http.HttpEntity;
@@ -23,7 +23,6 @@ import java.util.*;
 
 @Data
 public class HttpClientHolder {
-//    private String yuqueApiBase = "https://www.yuque.com/api/v2";
     private String yuqueToken = null;
 
     void HttpClientHolder(String Token){
@@ -198,6 +197,11 @@ public class HttpClientHolder {
         }
         return vo;
     }
+    /**
+     * 分析返回的非标json
+     * @param content
+     * @return
+     */
     private Map<String,String> dig400(String content){
         Map<String,String> map = new HashMap<>();
         try {
