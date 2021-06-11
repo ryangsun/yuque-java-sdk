@@ -3,6 +3,9 @@ package com.bumao.model.yuquesdk.service;
 import com.alibaba.fastjson.JSONObject;
 import com.bumao.model.yuquesdk.domain.*;
 import com.bumao.model.yuquesdk.exception.YuqueException;
+import com.bumao.model.yuquesdk.vo.BookDetailVo;
+import com.bumao.model.yuquesdk.vo.DocDetailVo;
+import com.bumao.model.yuquesdk.vo.GroupDetailVo;
 import org.junit.Test;
 
 import java.util.List;
@@ -39,21 +42,19 @@ public class HttpClientDemo extends HttpClientHolder {
 //        List<GroupSerializer> groupList1 = client.listJoinedGroupByLogin("u1486894");
 //        System.out.println(groupList1);
 //
-//        System.out.println("--获取公开组织列表--");
-//        List<GroupSerializer> groupList3 = client.listPublicGroup();
-//        System.out.println(groupList3);
-//        System.out.println(groupList3.size());
+        System.out.println("--获取公开组织列表--");
+        List<GroupSerializer> groupList3 = client.listPublicGroup();
+        System.out.println(groupList3);
+        System.out.println(groupList3.size());
 //
 //        List<GroupSerializer> groupList2 = client.listPublicGroup(99);
 //        System.out.println(groupList2);
 //        System.out.println(groupList2.size());
 
-//        System.out.println("--获取单个组织的详细信息--");
-//        /**
-//         * todo 应返回三个对象
-//         */
-//        GroupSerializer group = client.getGroupInfoById("firstGroup");
-//        System.out.println(group);
+        System.out.println("--获取单个组织的详细信息--");
+        GroupDetailVo groupDetailVo = client.getGroupInfoById("antv");
+        System.out.println(groupDetailVo.getData());
+        System.out.println(groupDetailVo.getAbilities());
 
 //        System.out.println("--创建组织--");
 //        GroupCreatePo createPo = new GroupCreatePo();
@@ -137,11 +138,9 @@ public class HttpClientDemo extends HttpClientHolder {
 //        System.out.println(bookSerializer);
 //
 //        System.out.println("--获取知识库详情 by Id--");
-        /*
-        todo 权限项目
-         */
-//        BookSerializer bookSerializerDetail = client.getRepoDetailById("20113349");
-//        System.out.println(bookSerializerDetail);
+//        BookDetailVo bookDetailVo = client.getRepoDetailById("20113349");
+//        System.out.println(bookDetailVo.getData());//repo
+//        System.out.println(bookDetailVo.getAbilities());//Abilities
 
 //        System.out.println("--更新知识库信息 by repoId--");
 //        RepoCreatePo upPo = new RepoCreatePo();
@@ -174,12 +173,10 @@ public class HttpClientDemo extends HttpClientHolder {
 //        List<DocSerializer> docSerializerList = client.listDocByNameSpace("20113349");
 //        System.out.println(docSerializerList);
 
-        System.out.println("--获取单篇文档的详细信息 by slug--");
-        /*
-        todo 还有属性
-         */
-        DocDetailSerializer docDetailSerializer = client.getDocDetailBySlug("u1486894/nn3k9e","hgg9lg");
-        System.out.println(docDetailSerializer);
+//        System.out.println("--获取单篇文档的详细信息 by slug--");
+//        DocDetailVo docDetailVo = client.getDocDetailBySlug("u1486894/nn3k9e","hgg9lg");
+//        System.out.println(docDetailVo.getData());//文章
+//        System.out.println(docDetailVo.getAbilities());//Abilities
 
 //        System.out.println("--创建文档 by nameSpace--");
 //        DocCreatePo createPo = new DocCreatePo();

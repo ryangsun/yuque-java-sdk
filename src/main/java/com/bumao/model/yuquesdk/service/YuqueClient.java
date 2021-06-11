@@ -7,6 +7,9 @@ import com.bumao.model.yuquesdk.exception.YuqueException;
 import com.bumao.model.yuquesdk.po.DocCreatePo;
 import com.bumao.model.yuquesdk.po.GroupCreatePo;
 import com.bumao.model.yuquesdk.po.RepoCreatePo;
+import com.bumao.model.yuquesdk.vo.BookDetailVo;
+import com.bumao.model.yuquesdk.vo.DocDetailVo;
+import com.bumao.model.yuquesdk.vo.GroupDetailVo;
 import com.bumao.model.yuquesdk.vo.HttpRespVo;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.http.client.methods.HttpDelete;
@@ -131,17 +134,23 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public GroupDetailSerializer getGroupInfoById(String groupId) throws YuqueException {
+    public GroupDetailVo getGroupInfoById(String groupId) throws YuqueException {
         HttpGet httpGet = buildHttpGet(yuqueApiBase+"/groups/"+groupId);
         //发送请求
         HttpRespVo vo = doRequest(httpGet);
 //        System.out.println(vo);
         //转json
         JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
+        JSONObject abli = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("abilities");
         //转实体
         GroupDetailSerializer group = JSONObject.toJavaObject(json,GroupDetailSerializer.class);
+        GroupAbilities groupAbilities = JSONObject.toJavaObject(abli,GroupAbilities.class);
 
-        return group;
+        GroupDetailVo groupDetailVo = new GroupDetailVo();
+        groupDetailVo.setAbilities(groupAbilities);
+        groupDetailVo.setData(group);
+
+        return groupDetailVo;
     }
 
     /**
@@ -477,16 +486,23 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public BookDetailSerializer getRepoDetailById(String repoId) throws YuqueException {
+    public BookDetailVo getRepoDetailById(String repoId) throws YuqueException {
         HttpGet httpGet = buildHttpGet(yuqueApiBase+"/repos/"+repoId);
         //发送请求
         HttpRespVo vo = doRequest(httpGet);
 //        System.out.println(vo);
         //转jsonArr
         JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
+        JSONObject abli = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("abilities");
         //转实体
         BookDetailSerializer bookDetailSerializer =  JSONObject.toJavaObject(json,BookDetailSerializer.class);
-        return bookDetailSerializer;
+        BookAbilities bookAbilities =  JSONObject.toJavaObject(abli,BookAbilities.class);
+
+        BookDetailVo bookDetailVo = new BookDetailVo();
+        bookDetailVo.setAbilities(bookAbilities);
+        bookDetailVo.setData(bookDetailSerializer);
+
+        return bookDetailVo;
     }
 
     /**
@@ -495,7 +511,7 @@ public class YuqueClient extends HttpClientHolder{
      * @return
      * @throws YuqueException
      */
-    public BookSerializer getRepoDetailByNameSpace(String nameSpace) throws YuqueException {
+    public BookDetailVo getRepoDetailByNameSpace(String nameSpace) throws YuqueException {
         return this.getRepoDetailById(nameSpace);
     }
 
@@ -612,16 +628,23 @@ public class YuqueClient extends HttpClientHolder{
      * @return docSerializer
      * @throws YuqueException
      */
-    public DocDetailSerializer getDocDetailBySlug(String nameSpace,String slug) throws YuqueException {
+    public DocDetailVo getDocDetailBySlug(String nameSpace,String slug) throws YuqueException {
         HttpGet httpGet = buildHttpGet(yuqueApiBase+"/repos/"+nameSpace+"/docs/"+slug);
         //发送请求
         HttpRespVo vo = doRequest(httpGet);
 //        System.out.println(vo);
         //转json
         JSONObject json = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("data");
-        //转user
+        JSONObject abli = JSONObject.parseObject(vo.getHttpContent()).getJSONObject("abilities");
+        //转实体
         DocDetailSerializer docDetailSerializer = JSONObject.toJavaObject(json,DocDetailSerializer.class);
-        return docDetailSerializer;
+        DocAbilities abilities = JSONObject.toJavaObject(abli,DocAbilities.class);
+
+        DocDetailVo docDetailVo = new DocDetailVo();
+        docDetailVo.setData(docDetailSerializer);
+        docDetailVo.setAbilities(abilities);
+
+        return docDetailVo;
     }
 
     /**
