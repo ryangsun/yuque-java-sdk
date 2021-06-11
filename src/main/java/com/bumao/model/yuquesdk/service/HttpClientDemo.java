@@ -3,6 +3,7 @@ package com.bumao.model.yuquesdk.service;
 import com.alibaba.fastjson.JSONObject;
 import com.bumao.model.yuquesdk.domain.*;
 import com.bumao.model.yuquesdk.exception.YuqueException;
+import com.bumao.model.yuquesdk.po.SearchPo;
 import com.bumao.model.yuquesdk.vo.BookDetailVo;
 import com.bumao.model.yuquesdk.vo.DocDetailVo;
 import com.bumao.model.yuquesdk.vo.GroupDetailVo;
@@ -201,5 +202,17 @@ public class HttpClientDemo extends HttpClientHolder {
 //        System.out.println("--删除文档 by repoId--");
 //        DocSerializer docSerializerDel = client.deleteDocByRepoId("20113349","46939326");
 //        System.out.println(docSerializerDel);
+    }
+
+    @Test
+    public void TestMaster() throws YuqueException {
+        YuqueClient client = new YuqueClient("yuque-token");
+
+        System.out.println("--搜索--");
+        SearchPo searchPo = new SearchPo();
+        searchPo.setType("doc");
+        searchPo.setQ("世界上最好的语言");
+        JSONObject obj = client.listSearch(searchPo);
+        System.out.println(obj);
     }
 }

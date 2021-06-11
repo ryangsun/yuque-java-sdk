@@ -7,6 +7,7 @@ import com.bumao.model.yuquesdk.exception.YuqueException;
 import com.bumao.model.yuquesdk.po.DocCreatePo;
 import com.bumao.model.yuquesdk.po.GroupCreatePo;
 import com.bumao.model.yuquesdk.po.RepoCreatePo;
+import com.bumao.model.yuquesdk.po.SearchPo;
 import com.bumao.model.yuquesdk.vo.BookDetailVo;
 import com.bumao.model.yuquesdk.vo.DocDetailVo;
 import com.bumao.model.yuquesdk.vo.GroupDetailVo;
@@ -738,5 +739,30 @@ public class YuqueClient extends HttpClientHolder{
         //转user
         DocSerializer docSerializer = JSONObject.toJavaObject(json,DocSerializer.class);
         return docSerializer;
+    }
+
+    public JSONObject listSearch(SearchPo searchPo) throws YuqueException {
+        Map<String,String> para = new HashMap<>();
+        if(searchPo.getType()==null){
+            throw new YuqueException("type不能为null");
+        }
+        para.put("type",searchPo.getType());
+        if(searchPo.getQ()==null){
+            throw new YuqueException("q不能为null");
+        }
+        para.put("q",searchPo.getQ());
+        if(searchPo.getOffset()!=null){
+            para.put("offset",searchPo.getOffset().toString());
+        }
+        if( searchPo.getRelated()!=null && searchPo.getRelated() ){
+            para.put("related","true");
+        }
+
+        HttpGet httpGet = buildHttpGet(yuqueApiBase+"/search",para);
+        //发送请求
+        HttpRespVo vo = doRequest(httpGet);
+        //转json
+        JSONObject json = JSONObject.parseObject(vo.getHttpContent());
+        return json;
     }
 }
