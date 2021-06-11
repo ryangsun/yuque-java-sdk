@@ -1,5 +1,14 @@
 # 语雀javaSDK
 
+### 包引用
+```
+<dependency>
+    <groupId>com.bumao.models.yuquesdk</groupId>
+    <artifactId>yuquesdk</artifactId>
+    <version>0.0.1</version>
+</dependency>
+```
+
 ## 使用方式
 
 ```
